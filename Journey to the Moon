@@ -1,0 +1,45 @@
+//https://www.hackerrank.com/challenges/journey-to-the-moon/problem//
+#include<bits/stdc++.h>
+#include<vector>
+
+using namespace std;
+vector<int> adj[100002];
+bool visited[100002];
+long vertices;
+void dfs(int n)
+{
+    vertices++;
+    visited[n] = true;
+    for( vector<int>::iterator i=adj[n].begin(); i!=adj[n].end(); i++ )
+    {
+        if(!visited[*i])
+        {
+            dfs(*i);
+        }
+    }
+}
+int main()
+{
+    long n,p,a,b,i;
+    cin>>n>>p;
+    for( i=0;i<p;i++ )
+    {
+        cin>>a>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    long c=0,country[100002],sum=0;
+    for( i=0;i<n;i++ )
+    {
+        if(!visited[i])
+        {
+            vertices = 0;
+            dfs(i);
+            country[c++] = vertices;
+        }
+    }
+    for( i=0;i<c;i++ )
+        sum += country[i]*(country[i]-1)/2;
+    cout<< (n*(n-1)/2)-(sum) << endl;
+return 0;
+}
