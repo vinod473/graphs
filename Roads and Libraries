@@ -1,0 +1,59 @@
+//https://www.hackerrank.com/challenges/torque-and-development/problem//
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+vector<int> adj[100002];
+bool visited[100002];
+long node;
+
+void dfs(int n)
+{
+    node++;
+    visited[n] = true;
+    for(vector<int>::iterator i = adj[n].begin(); i != adj[n].end(); i++)
+    {
+        if( !visited[*i] )
+            dfs(*i);
+    }
+}
+
+int main() 
+{
+  int t;
+    cin>>t;
+    while(t--)
+    {
+        long n,m,x,y,a,b,i;
+        long cost = 0;
+        cin>>n>>m>>x>>y;
+        for( i=1;i<=m;i++ )
+        {
+            cin>>a>>b;
+            adj[a].push_back(b);
+            adj[b].push_back(a);
+        }
+        for( i=1;i<=n;i++ )
+        {
+            if(!visited[i])
+            {
+                node = 0;
+                dfs(i);
+                cost += x;
+                if( x > y )
+                    cost += (node-1)*y;
+                else cost += (node-1)*x;
+            }
+        }
+        cout<<cost<<endl;
+        for( i=1;i<=n;i++ )
+        {
+            visited[i] = false;
+            adj[i].clear();
+        }
+    }
+return 0;
+}
