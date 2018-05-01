@@ -1,0 +1,64 @@
+/*   https://www.geeksforgeeks.org/union-find/   */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Graph {
+    int V, E, i;
+    Edge edge[];
+
+    class Edge {
+        int src;
+        int dest;
+    }
+
+    Graph(int v, int e) {
+        V = v;
+        E = e;
+        edge = new Edge[e];
+        for (i = 0; i < e; i++)
+            edge[i] = new Edge();
+    }
+
+    int find(int parent[], int i) {
+        if (parent[i] == -1)
+            return i;
+        return find(parent, parent[i]);
+    }
+
+    void union(int parent[], int i, int j) {
+        parent[i] = j;
+    }
+
+    int IsCycle(Graph graph) {
+        int parent[] = new int[graph.V];
+        for (i = 0; i < graph.V; i++)
+            parent[i] = -1;
+        for (i = 0; i < graph.E; i++) {
+            int x = find(parent, edge[i].src);
+            int y = find(parent, edge[i].dest);
+            if (x == y)
+                return 1;
+            union(parent, x, y);
+        }
+        return 0;
+    }
+
+    public static void main(String args[]) {
+        int V = 3, E = 3;
+        Graph graph = new Graph(V, E);
+        graph.edge[0].src = 0;
+        graph.edge[0].dest = 1;
+
+        graph.edge[1].src = 1;
+        graph.edge[1].dest = 2;
+
+        graph.edge[2].src = 0;
+        graph.edge[2].dest = 2;
+
+        if (graph.IsCycle(graph) == 1)
+            System.out.println("Cycle found");
+        else System.out.println("Cycle not found");
+    }
+}
